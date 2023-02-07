@@ -1,0 +1,9 @@
+ npx create-expo-app .   // created in pwd
+
+ npm i @react-navigation/native @react-navigation/native-stack  // used for routing
+
+ npm i react-native-paper // for web apps
+
+use jsx  // tell that we are using javaScript with react
+
+ 
