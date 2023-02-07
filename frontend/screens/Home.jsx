@@ -4,6 +4,9 @@ import { defaultStyles, colors } from '../styles/styles'
 import Header from '../components/Header'
 import { Avatar, Button } from 'react-native-paper'
 import SearchModal from '../components/SearchModal'
+import ProductCard from '../components/ProductCard'
+import { useNavigation } from '@react-navigation/native'
+import Footer from '../components/Footer'
 const categories = [
     { category: "Nice", _id: "asfgasf" },
     { category: "Nice2", _id: "sadasds" },
@@ -17,10 +20,55 @@ const products = [
     {
         price: 23950,
         name: "Sample",
+        stock: 1,
         _id: "fakgfewkl",
         images: [
             {
-                url: "https://pixabay.com/get/g245297db7ec96515fdb0f3af69e7c73c4a031838bca12ad495af662d8b0c3be2f80d6ce2b0305bc79afb55b5d021c8073d83f2cafa44f8a5cd43c2c191a3bad1253040c4d12f1f7dba98b7bcd2ce8e11_1920.jpg",
+                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
+            },
+        ],
+    },
+    {
+        price: 23950,
+        name: "Sample",
+        stock: 1,
+        _id: "fakgfaw3rwewkl",
+        images: [
+            {
+                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
+            },
+        ],
+    },
+    {
+        price: 23950,
+        name: "Sample",
+        stock: 1,
+        _id: "fakgfewfhskl",
+        images: [
+            {
+                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
+            },
+        ],
+    },
+    {
+        price: 23950,
+        name: "Sample",
+        stock: 1,
+        _id: "fakgfewfdskl",
+        images: [
+            {
+                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
+            },
+        ],
+    },
+    {
+        price: 23950,
+        name: "Sample",
+        stock: 1,
+        _id: "fakgfefawerwkl",
+        images: [
+            {
+                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
             },
         ],
     },
@@ -37,7 +85,11 @@ const Home = () => {
         setCategory(id);
     };
 
+    const addToCartHandler = (id) => {
+        console.log("Add to cart", id);
+    }
 
+    const navigate = useNavigation();
 
     return (
         <>
@@ -71,7 +123,7 @@ const Home = () => {
 
                     {/*SearchBar*/}
                     <View>
-                        <TouchableOpacity onPress={() => setActiveSearch((prev) => !prev)}>
+                        <TouchableOpacity activeOpacity={1} onPress={() => setActiveSearch((prev) => !prev)}>
                             <Avatar.Icon
                                 icon={"magnify"}
                                 color={"gray"}
@@ -115,10 +167,34 @@ const Home = () => {
                     </ScrollView>
                 </View>
                 {/*Products*/}
+                <View style={{ flex: 1 }}>
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {
+                            products.map((item, index) => (
+                                <ProductCard
+                                    stock={item.stock}
+                                    name={item.name}
+                                    price={item.price}
+                                    image={item.images[0]?.url}
+                                    addToCartHandler={addToCartHandler}
+                                    id={item._id}
+                                    key={item._id}
+                                    i={index}
+                                    navigate={navigate}
+                                />
+                            ))
+                        }
+                    </ScrollView>
 
+                </View>
             </View>
+
+            <Footer activeRoute={"home"}/>
         </>
     )
 }
 
-export default Home
+export default Home 
