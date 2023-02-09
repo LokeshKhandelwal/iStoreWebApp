@@ -11,7 +11,7 @@ const Payment = ({ navigation, route }) => {
     const isAuthenticated = false;
 
     const rediirectToLogin = () => {
-        navigation.navigation("login")
+        navigation.navigate("login")
     }
     const codHandler = () => {
 

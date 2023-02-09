@@ -4,12 +4,12 @@ import { useNavigation } from '@react-navigation/native'
 import { colors } from '../styles/styles';
 import { Avatar } from 'react-native-paper';
 
-const Footer = (activeRoute = "home") => {
+const Footer = ({ activeRoute = "home" }) => {
     const navigate = useNavigation();
 
     const loading = false;
 
-    const isAuthenticated = false;
+    const isAuthenticated = true;
 
     const navigationHandler = (key) => {
         switch (key) {
@@ -61,7 +61,12 @@ const Footer = (activeRoute = "home") => {
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.8} onPress={() => navigationHandler(2)}>
                     <Avatar.Icon
-                        icon={activeRoute === "profile" ? "account" : "account-outline"}
+                        icon={isAuthenticated === false
+                            ? "login"
+                            :activeRoute === "profile"
+                            ? "account"
+                            : "account-outline"
+                        }
                         {...avatarOption}
                     />
                 </TouchableOpacity>
