@@ -7,6 +7,7 @@ import SearchModal from '../components/SearchModal'
 import ProductCard from '../components/ProductCard'
 import { useNavigation } from '@react-navigation/native'
 import Footer from '../components/Footer'
+import Heading from '../components/Heading'
 const categories = [
     { category: "Nice", _id: "asfgasf" },
     { category: "Nice2", _id: "sadasds" },
@@ -108,7 +109,7 @@ const Home = () => {
             <View style={{ ...defaultStyles, flex: 1 }}>
                 {/* Header*/}
                 <Header />
-
+                
                 {/*Heading row*/}
                 <View style={{
                     paddingTop: 70,
@@ -116,10 +117,7 @@ const Home = () => {
                     justifyContent: "space-between",
                     alignItems: "center"
                 }}>
-                    <View>
-                        <Text style={{ fontSize: 25 }}>Our</Text>
-                        <Text style={{ fontSize: 25, fontWeight: "900" }}>Product</Text>
-                    </View>
+                    <Heading />
 
                     {/*SearchBar*/}
                     <View>
