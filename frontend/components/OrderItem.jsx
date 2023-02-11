@@ -35,14 +35,14 @@ const OrderItem = ({
             {
                 admin && (
                     <Button
-                        textColor={i % 2 === 0 ? colors.color3 : colors.color2}
+                        textColor={i % 2 === 0 ? colors.color5 : colors.color2}
                         icon={"pen"}
                         mode={"contained"}
                         style={{
                             width:120,
                             alignSelf:"center",
                             marginTop:10,
-                            backgroundColor:colors.color1
+                            backgroundColor:i % 2 === 0 ? colors.color3 : colors.color1
                         }}
                         onPress={()=>updateHandler(id)}
                         loading={loading}

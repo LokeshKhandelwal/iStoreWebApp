@@ -17,12 +17,13 @@ const categories = [
     { category: "Nice2", _id: "sfg4res" },
     { category: "Nice3", _id: "shsrhy54j" }
 ];
-const products = [
+export const products = [
     {
         price: 23950,
         name: "Sample",
-        stock: 1,
+        stock: 15,
         _id: "fakgfewkl",
+        category: "Laptop",
         images: [
             {
                 url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
@@ -32,47 +33,16 @@ const products = [
     {
         price: 23950,
         name: "Sample",
-        stock: 1,
-        _id: "fakgfaw3rwewkl",
+        stock: 2,
+        _id: "fakgfesadwkl",
+        category: "Animal",
         images: [
             {
                 url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
             },
         ],
     },
-    {
-        price: 23950,
-        name: "Sample",
-        stock: 1,
-        _id: "fakgfewfhskl",
-        images: [
-            {
-                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
-            },
-        ],
-    },
-    {
-        price: 23950,
-        name: "Sample",
-        stock: 1,
-        _id: "fakgfewfdskl",
-        images: [
-            {
-                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
-            },
-        ],
-    },
-    {
-        price: 23950,
-        name: "Sample",
-        stock: 1,
-        _id: "fakgfefawerwkl",
-        images: [
-            {
-                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
-            },
-        ],
-    },
+
 
 ];
 const Home = () => {
@@ -109,7 +79,7 @@ const Home = () => {
             <View style={{ ...defaultStyles, flex: 1 }}>
                 {/* Header*/}
                 <Header />
-                
+
                 {/*Heading row*/}
                 <View style={{
                     paddingTop: 70,
@@ -190,7 +160,7 @@ const Home = () => {
                 </View>
             </View>
 
-            <Footer activeRoute={"home"}/>
+            <Footer activeRoute={"home"} />
         </>
     )
 }
