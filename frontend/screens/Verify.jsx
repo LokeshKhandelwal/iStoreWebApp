@@ -3,15 +3,18 @@ import React, { useState } from 'react'
 import { colors, defaultStyles, formHeading, inputOptions, formStyles as styles } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper';
 import Footer from "../components/Footer"
+import { useMessageAndErrorOther } from '../utils/hooks';
+import { useDispatch } from 'react-redux';
+import { resetPassword } from '../redux/actions/otherAction';
 const Verify = ({ navigation }) => {
     const [otp, setOtp] = useState("");
     const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
+    const loading = useMessageAndErrorOther(dispatch,navigation,"login");
     const submitHandler = () => {
-        alert("Yeah")
-        //Will remove this is future
-        navigation.navigate("login"); 
+        dispatch(resetPassword(otp,password));
     }
-    const loading = false;
+
 
     return (
         <>
@@ -42,7 +45,7 @@ const Verify = ({ navigation }) => {
 
                     <Button
                         textColor={colors.color2}
-                        disabled={otp === "" || password===""}
+                        disabled={otp === "" || password === ""}
                         onPress={submitHandler}
                         style={styles.btn}
                         loading={loading}

@@ -367,7 +367,6 @@ export const deleteProduct = (productId) => async (dispatch) => {
 
 export const forgetPassword = (email) => async (dispatch) => {
   try {
-    console.log("working 1");
     dispatch({
       type: "forgetPasswordRequest",
     });
@@ -384,19 +383,15 @@ export const forgetPassword = (email) => async (dispatch) => {
         withCredentials: true,
       }
     );
-    console.log("working 3");
 
     dispatch({
       type: "forgetPasswordSuccess",
       payload: data.message,
     });
-    console.log("working 4");
   } catch (error) {
-    console.log(error.response.data);
     dispatch({
       type: "forgetPasswordFail",
       payload: error.response.data.message,
-      
     });
   }
 };
