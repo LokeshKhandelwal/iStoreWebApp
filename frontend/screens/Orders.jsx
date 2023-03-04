@@ -5,79 +5,13 @@ import Header from '../components/Header'
 import Loader from '../components/Loader'
 import { Headline } from 'react-native-paper'
 import OrderItem from '../components/OrderItem'
+import { useGetOrders } from '../utils/hooks'
+import { useIsFocused } from '@react-navigation/native'
 
-export const orders = [
-    {
-        _id: "sdgsgdjdh",
-        shippingInfo: {
-            address: "73 east",
-            city: "Las Angels",
-            country: "USA",
-            pincode: 301001
-        },
-        createdAt: "12-12-2022T3453",
-        orderStatus: "Processing",
-        paymentMethod: "COD",
-        totalAmount: 30000
-    },
-
-    {
-        _id: "sdgsgfsadjdh",
-        shippingInfo: {
-            address: "73 east",
-            city: "Las Angels",
-            country: "USA",
-            pincode: 301001
-        },
-        createdAt: "12-12-2022T3453",
-        orderStatus: "Processing",
-        paymentMethod: "COD",
-        totalAmount: 30000
-    },
-
-    {
-        _id: "sdgsgdfsafjdh",
-        shippingInfo: {
-            address: "73 east",
-            city: "Las Angels",
-            country: "USA",
-            pincode: 301001
-        },
-        createdAt: "12-12-2022T3453",
-        orderStatus: "Processing",
-        paymentMethod: "COD",
-        totalAmount: 30000
-    },
-    {
-        _id: "sdgsgdfssdaafjdh",
-        shippingInfo: {
-            address: "73 east",
-            city: "Las Angels",
-            country: "USA",
-            pincode: 301001
-        },
-        createdAt: "12-12-2022T3453",
-        orderStatus: "Processing",
-        paymentMethod: "COD",
-        totalAmount: 30000
-    },
-    {
-        _id: "sdgsgddsafsafjdh",
-        shippingInfo: {
-            address: "73 east",
-            city: "Las Angels",
-            country: "USA",
-            pincode: 301001
-        },
-        createdAt: "12-12-2022T3453",
-        orderStatus: "Processing",
-        paymentMethod: "COD",
-        totalAmount: 30000
-    },
-]
 
 const Orders = () => {
-    const loading = false;
+    const isFocused = useIsFocused();
+    const {loading,orders} = useGetOrders(isFocused);
     return (
         <View style={{
             ...defaultStyles,

@@ -2,32 +2,57 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors, defaultStyles, formHeading, inputOptions, inputStyling } from '../../styles/styles'
 import Header from '../../components/Header'
-import Loader from '../../components/Loader'
 import { Avatar, Button, TextInput } from 'react-native-paper'
 import SelectComponent from '../../components/SelectComponent'
+import { useSetCategories, useMessageAndErrorOther } from '../../utils/hooks'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import mime from 'mime'
+import { createProduct } from '../../redux/actions/otherAction'
 
-const NewProduct = ({ navigation, route }) => {
-  const loading = false;
+
+const NewProduct = ({ route }) => {
+
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+
+  const navigation = useNavigation();
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [category, setCategory] = useState("Laptop");
-  const [categoryID, setCategoryID] = useState("");
-  const [categories, setCategories] = useState([
-    { _id: "fsaSfasga", category: "Laptop" },
-    { _id: "fsafsaSfasga", category: "Footwear" },
-    { _id: "safasfSfasga", category: "Dog" },
-    { _id: "asfasfSfasga", category: "Clothes" },
-  ]);
-  const [visible, setVisible] = useState(false);
+  const [category, setCategory] = useState("Choose Category");
+  const [categoryID, setCategoryID] = useState(undefined);
+  const [categories, setCategories] = useState([]);
 
+  useSetCategories(setCategories, isFocused);
+
+  const disabledBtn = !name || !description || !price || !stock || !image;
+  
+  const loading = useMessageAndErrorOther(dispatch, navigation,"adminpanel");
   const submitHandler = () => {
-    console.log(name, description, price, stock, categoryID)
-  }
 
+    const myForm = new FormData();
+    
+    myForm.append("name", name);
+    myForm.append("description", description);
+    myForm.append("price", price);
+    myForm.append("stock", stock);
+    myForm.append("file", {
+      uri: image,
+      type: mime.getType(image),
+      name: image.split("/").pop()
+    });
+
+    if (categoryID) myForm.append("category", categoryID);
+
+    dispatch(createProduct(myForm));
+    navigation.navigate("adminpanel");
+  };
+  
   useEffect(() => {
     if (route.params?.image) {
       setImage(route.params.image)
@@ -149,7 +174,7 @@ const NewProduct = ({ navigation, route }) => {
               }}
               onPress={submitHandler}
               loading={loading}
-              disabled={ loading}
+              disabled={disabledBtn || loading}
             >
               Create
             </Button>

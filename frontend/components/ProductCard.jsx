@@ -17,13 +17,13 @@ const ProductCard = ({
         <TouchableOpacity activeOpacity={1} onPress={() => navigate.navigate("productdetails", { id })}>
             <View
                 style={{
-                    elevation: 5,
-                    width: 220,
+                    elevation: 15,
+                    width: 250,
                     alignItems: "center",
                     justifyContent: "space-between",
                     margin: 20,
                     borderRadius: 20,
-                    height: 400,
+                    height: 370,
                     backgroundColor: i % 2 == 0 ? colors.color1 : colors.color2,
                 }}
             >
@@ -37,7 +37,7 @@ const ProductCard = ({
                         height: 200,
                         resizeMode: "contain",
                         position: "absolute",
-                        left: 50,
+                        left: 30,
                         top: 105
                     }}
                 />
@@ -54,6 +54,7 @@ const ProductCard = ({
                         color: i % 2 === 0 ? colors.color2 : colors.color3,
                         fontSize: 25,
                         fontWeight: "300",
+                        width:"60%"
 
                     }}>
                         {name}
@@ -71,13 +72,14 @@ const ProductCard = ({
                     style={{
                         backgroundColor: i % 2 === 0 ? colors.color2 : colors.color3,
                         borderRadius: 0,
+                        paddingVertical:7,
                         borderBottomLeftRadius: 20,
                         borderBottomRightRadius: 20,
                         width: "100%"
                     }}
                 >
                     <Button
-                        onPress={() => addToCartHandler(id, stock)}
+                        onPress={() => addToCartHandler(id, name, price, image, stock)}
                         textColor={i % 2 === 0 ? colors.color1 : colors.color2}
                     >Add to Cart </Button>
                 </TouchableOpacity>

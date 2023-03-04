@@ -4,18 +4,21 @@ import { colors, defaultStyles } from '../styles/styles'
 import Header from '../components/Header'
 import Heading from '../components/Heading'
 import ConfirmOrderItem from '../components/ConfirmOrderItem'
-import { cartItems } from './Cart'
 import { useNavigation } from '@react-navigation/native'
 import { Button } from 'react-native-paper'
+import { useSelector } from 'react-redux'
+import { useState } from 'react'
 
 const ConfirmOrder = () => {
 
     const navigate = useNavigation();
 
-    const itemPrice = 4000;
-    const shippingCharges = 200;
-    const tax = 0.18 * itemPrice;
-    const totalAmount = itemPrice + shippingCharges + tax;
+    const { cartItems } = useSelector((state) => state.cart)
+
+    const [itemPrice] = useState(cartItems.reduce((prev, curr) => prev + curr.quantity * curr.price, 0));
+    const [shippingCharges] = useState(itemPrice > 2000 ? 0 : 60);
+    const [tax] = useState(Number((0.18 * itemPrice).toFixed()));
+    const [totalAmount] = useState(itemPrice + shippingCharges + tax);
     return (
         <View style={defaultStyles}>
             <Header back={true} />
@@ -33,7 +36,7 @@ const ConfirmOrder = () => {
             >
                 <ScrollView>
                     {
-                        cartItems.map(i => (
+                        cartItems.map((i) => (
                             <ConfirmOrderItem
                                 key={i.product}
                                 image={i.image}

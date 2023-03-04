@@ -3,30 +3,53 @@ import React, { useEffect, useState } from 'react'
 import { colors, defaultStyles, formHeading, inputOptions, formStyles as styles, defaultImg } from '../styles/styles'
 import { Avatar, Button, TextInput } from 'react-native-paper';
 import Footer from "../components/Footer"
-const SignUp = ({ navigation,route }) => {
+import mime from 'mime';
+import { useDispatch } from 'react-redux';
+import { register } from '../redux/actions/userAction';
+import { useMessageAndErrorUser } from '../utils/hooks';
+const SignUp = ({ navigation, route }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [country, setCountry] = useState("");
-    const [pincode, setPicode] = useState("");
+    const [pincode, setPincode] = useState("");
     const [avatar, setAvatar] = useState("");
 
+
+    const dispatch = useDispatch();
     const disableBtn = !name || !email || !password || !address || !city || !country || !pincode;
 
     const submitHandler = () => {
-        alert("Yeah")
-        //Will remove this is future
-        navigation.navigate("verify");
-    }
-    const loading = false;
+        const myForm = new FormData();
+        myForm.append("name", name);
+        myForm.append("email", email);
+        myForm.append("password", password);
+        myForm.append("address", address);
+        myForm.append("city", city);
+        myForm.append("country", country);
+        myForm.append("pinCode", pincode);
 
+        if (avatar !== "") {
+            myForm.append("file", {
+                uri: avatar,
+                type: mime.getType(avatar),
+                name: avatar.split("/").pop()
+            })
+        }
+
+        dispatch(register(myForm));
+        
+    };
+    
+    const loading = useMessageAndErrorUser(navigation,dispatch,"profile");
+    
     useEffect(() => {
         if (route.params?.image) {
-          setAvatar(route.params.image)
+            setAvatar(route.params.image)
         }
-      }, [route.params])
+    }, [route.params])
 
     return (
         <>
@@ -45,16 +68,16 @@ const SignUp = ({ navigation,route }) => {
                         backgroundColor: colors.color3
                     }}
                 >
-                    <View style={{minHeight:900}}>
+                    <View style={{ minHeight: 900 }}>
                         <Avatar.Image style={{
                             alignSelf: "center",
-                            backgroundColor:colors.color1,
+                            backgroundColor: colors.color1,
                         }} size={80}
-                        source={{
-                            uri:avatar?avatar:defaultImg,
-                        }}/>
+                            source={{
+                                uri: avatar ? avatar : defaultImg,
+                            }} />
 
-                        <TouchableOpacity onPress={()=>navigation.navigate("camera",{})}> 
+                        <TouchableOpacity onPress={() => navigation.navigate("camera", {})}>
                             <Button textColor={colors.color1}>Change Photo</Button>
                         </TouchableOpacity>
                         <TextInput
@@ -92,7 +115,7 @@ const SignUp = ({ navigation,route }) => {
                         <TextInput
                             {...inputOptions}
                             placeholder="Country"
-                            value={email}
+                            value={country}
                             onChangeText={setCountry}
                         />
                         <TextInput
@@ -100,7 +123,7 @@ const SignUp = ({ navigation,route }) => {
                             placeholder="Pincode"
                             keyboardType="numeric"
                             value={pincode}
-                            onChangeText={setPicode}
+                            onChangeText={setPincode}
                         />
 
 

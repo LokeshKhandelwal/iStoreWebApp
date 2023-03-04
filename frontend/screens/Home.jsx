@@ -1,66 +1,69 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { defaultStyles, colors } from '../styles/styles'
 import Header from '../components/Header'
 import { Avatar, Button } from 'react-native-paper'
 import SearchModal from '../components/SearchModal'
 import ProductCard from '../components/ProductCard'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import Footer from '../components/Footer'
 import Heading from '../components/Heading'
-const categories = [
-    { category: "Nice", _id: "asfgasf" },
-    { category: "Nice2", _id: "sadasds" },
-    { category: "Nice2", _id: "qwregs" },
-    { category: "Nice2", _id: "hgkghfj" },
-    { category: "Nice2", _id: "gfdjshfh" },
-    { category: "Nice2", _id: "sfg4res" },
-    { category: "Nice3", _id: "shsrhy54j" }
-];
-export const products = [
-    {
-        price: 23950,
-        name: "Sample",
-        stock: 15,
-        _id: "fakgfewkl",
-        category: "Laptop",
-        images: [
-            {
-                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
-            },
-        ],
-    },
-    {
-        price: 23950,
-        name: "Sample",
-        stock: 2,
-        _id: "fakgfesadwkl",
-        category: "Animal",
-        images: [
-            {
-                url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png",
-            },
-        ],
-    },
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllProducts } from "../redux/actions/productAction";
+import { useSetCategories } from '../utils/hooks'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 
-];
 const Home = () => {
 
     const [category, setCategory] = useState("");
     const [activeSearch, setActiveSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [categories, setCategories] = useState([]);
 
+    const navigate = useNavigation();
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
+
+    const { products } = useSelector((state) => state.product);
 
     const categoryButtonHandler = (id) => {
         setCategory(id);
     };
 
-    const addToCartHandler = (id) => {
-        console.log("Add to cart", id);
+    const addToCartHandler = (id, name, price, image, stock) => {
+        if(stock ==0) return Toast.show({
+            type:"error",
+            text1:"Out of Stock."
+        })
+        dispatch({
+            type: "addToCart",
+            payload: {
+                product: id,
+                name,
+                price,
+                image,
+                stock,
+                quantity: 1,
+            }
+        });
+        Toast.show({
+            type:"success",
+            text1:"Item added to cart."
+        })
     }
 
-    const navigate = useNavigation();
+    useSetCategories(setCategories, isFocused);
+
+    useEffect(() => {
+        const timeOutId = setTimeout(() => {
+            dispatch(getAllProducts(searchQuery, category));
+        }, 500);
+        return () => {
+            clearTimeout(timeOutId);
+        }
+    }, [dispatch, searchQuery, category, isFocused])
+
 
     return (
         <>

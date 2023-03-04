@@ -4,15 +4,27 @@ import { colors, defaultStyles, formHeading } from '../../styles/styles'
 import Header from '../../components/Header'
 import Loader from '../../components/Loader'
 import OrderItem from '../../components/OrderItem'
-import { orders } from '../Orders'
+import { useGetOrders, useMessageAndErrorOther } from '../../utils/hooks'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { Headline } from 'react-native-paper'
+import { useDispatch } from 'react-redux'
+import { processOrder } from '../../redux/actions/otherAction'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
-const AdminOrders = () => {
-  const loading = false;
 
-  const processOrderLoading = false;
+const AdminOrders = ({ navigation }) => {
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
 
-  const updateHandler = () => { };
+  const { loading, orders } = useGetOrders(isFocused, true);
 
+  const updateHandler = (id) => {
+    dispatch(processOrder(id));
+
+    navigation.navigate("adminpanel");
+
+  };
+  const processOrderLoading = useMessageAndErrorOther(dispatch, navigation, "adminpanel");
   return (
     <View style={{
       ...defaultStyles,
@@ -44,8 +56,8 @@ const AdminOrders = () => {
                       createdAt={item.createdAt}
                       address={`${item.shippingInfo.address}, ${item.shippingInfo.city}, ${item.shippingInfo.country} ${item.shippingInfo.pincode}`}
                       admin={true}
-                      updateHandler={updateHandler}
                       loading={processOrderLoading}
+                      updateHandler={updateHandler}
 
                     />
                   ))

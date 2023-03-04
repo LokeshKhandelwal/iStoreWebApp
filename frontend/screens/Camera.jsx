@@ -18,9 +18,7 @@ const CameraComponent = ({ navigation, route }) => {
       if (permissionResult.granted === false) return alert("Permission to access the Gallery is Required");
 
       const data = await ImagePicker.launchImageLibraryAsync({
-         allowsEditing: true,
-         aspect: [1, 1],
-         quality: 1,
+         
       })
 
       if (route.params?.newProduct) return navigation.navigate("newproduct", {

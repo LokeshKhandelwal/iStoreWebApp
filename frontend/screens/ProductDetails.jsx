@@ -1,10 +1,13 @@
 import { View, Text, Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { colors, defaultStyles } from '../styles/styles';
 import Header from '../components/Header';
 import Carousel from 'react-native-snap-carousel';
 import { Avatar, Button } from 'react-native-paper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { getProductDetails } from '../redux/actions/productAction';
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = SLIDER_WIDTH;
@@ -20,30 +23,29 @@ export const iconOptions = {
 
 
 const ProductDetails = ({ route: { params } }) => {
-    console.log(params.id);
 
-    const name = "Dog";
-    const price = 23950;
-    const description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quod nihil asperiores consequuntur iste veniam dolorum blanditiis necessitatibus sed saepe dolores, in modi, dignissimos ab ut qui! Qui consequatur dolor iure magnam ea eligendi doloremque aspernatur. Incidunt exercitationem, dicta esse et placeat architecto similique! Possimus molestiae sapiente explicabo porro minima magnam ullam placeat corrupti, repellat dolores necessitatibus totam esse cum corporis quisquam ipsa inventore amet sit, eos, odit dolorum distinctio error ea! Laborum numquam hic debitis, sed sequi porro maxime veniam harum fugiat error aliquid totam deleniti qui, fugit vero nesciunt illum impedit quidem ipsa facere excepturi dicta. Modi, amet?";
-    const stock = 5;
+    const {product:{
+        name,
+        price,
+        stock,
+        description,
+        images
+    }} = useSelector(state=>state.product);
+
+    
     const [quantity, setQuantity] = useState(1);
     const isCarousel = useRef(null);
 
+     
 
-    const images = [
-        {
-            id: "asfhkasbvfsaly",
-            url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png"
-        },
-        {
-            id: "asfhkasbvfsaly",
-            url: "https://cdn.pixabay.com/photo/2017/10/24/18/43/man-2885709_960_720.png"
-        },
-    ]
-
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
     const incrementQty = () => {
         if (quantity >= stock) {
-            return;
+            return Toast.show({
+                type:"error",
+                text1:"Maximum value added"
+            });
         }
         setQuantity((prev) => prev + 1);
     };
@@ -55,15 +57,32 @@ const ProductDetails = ({ route: { params } }) => {
     };
 
     const addToCardHandler = () => {
-        if (stock === 0) return Toast.show({
-            type: "error",
-            text1: "Out Of Stock",
+        if(stock ==0) return Toast.show({
+            type:"error",
+            text1:"Out of Stock."
+        })
+        dispatch({
+            type: "addToCart",
+            payload: {
+                product: params.id,
+                name,
+                price,
+                image:images[0]?.url,
+                stock,
+                quantity,
+            }
         });
         Toast.show({
             type:"success",
-            text1:"Added to cart"
+            text1:"Item added to cart."
         })
     }
+
+    useEffect(() => {
+        dispatch(getProductDetails(params.id));
+
+    }, [dispatch, params.id, isFocused]);
+
 
     return (
         <View style={{
@@ -71,8 +90,8 @@ const ProductDetails = ({ route: { params } }) => {
             padding: 0,
             backgroundColor: colors.color1
         }}>
-            <Header back={true} />
-
+            <Header back={true}  />
+            <View style={{marginVertical:10}}></View>
             {/*CarouseL */}
             <Carousel
                 layout="stack"
@@ -175,7 +194,7 @@ const style = StyleSheet.create({
         borderRadius: 5,
         borderColor: colors.color5,
     },
-    
+
     btnStyle: {
         backgroundColor: colors.color3,
         borderRadius: 69,

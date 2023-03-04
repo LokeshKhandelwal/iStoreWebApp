@@ -1,31 +1,36 @@
-import { View, Text,  ScrollView } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { colors, defaultStyles, formHeading, inputOptions, formStyles as styles } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper';
 import Header from '../components/Header';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateProfile } from '../redux/actions/otherAction';
+import { useMessageAndErrorOther } from '../utils/hooks';
 const UpdateProfile = ({ navigation }) => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [address, setAddress] = useState("");
-    const [city, setCity] = useState("");
-    const [country, setCountry] = useState("");
-    const [pincode, setPicode] = useState("");
 
-    const disableBtn = !name || !email  || !address || !city || !country || !pincode;
+    const {user} = useSelector(state=>state.user);
+    
+    const [name, setName] = useState(user?.name);
+    const [email, setEmail] = useState(user?.email);
+    const [address, setAddress] = useState(user?.address);
+    const [city, setCity] = useState(user?.city);
+    const [country, setCountry] = useState(user?.country);
+    const [pinCode, setPicode] = useState(user?.pinCode.toString());
 
+    
+    const dispatch = useDispatch();
+    const loading = useMessageAndErrorOther(dispatch,navigation,"profile");
     const submitHandler = () => {
-        alert("Yeah")
-        //Will remove this is future
+        dispatch(updateProfile(name, email, address, city, country, pinCode))
     }
-    const loading = false;
 
     return (
 
         <View style={{ ...defaultStyles, backgroundColor: colors.color2 }}>
-            <Header back={true}/>
+            <Header back={true} />
 
             {/*Heading */}
-            <View style={{ marginBottom: 20, paddingTop:70 }}>
+            <View style={{ marginBottom: 20, paddingTop: 70 }}>
                 <Text style={formHeading}>Edit Profile</Text>
             </View>
             <ScrollView
@@ -38,7 +43,7 @@ const UpdateProfile = ({ navigation }) => {
                 }}
             >
                 <View >
-                     
+
                     <TextInput
                         {...inputOptions}
                         placeholder="Name"
@@ -52,7 +57,7 @@ const UpdateProfile = ({ navigation }) => {
                         value={email}
                         onChangeText={setEmail}
                     />
-                    
+
                     <TextInput
                         {...inputOptions}
                         placeholder="Address"
@@ -75,7 +80,7 @@ const UpdateProfile = ({ navigation }) => {
                         {...inputOptions}
                         placeholder="Pincode"
                         keyboardType="numeric"
-                        value={pincode}
+                        value={pinCode}
                         onChangeText={setPicode}
                     />
 
@@ -84,13 +89,12 @@ const UpdateProfile = ({ navigation }) => {
 
                     <Button
                         textColor={colors.color2}
-                        disabled={disableBtn}
                         onPress={submitHandler}
                         style={styles.btn}
                         loading={loading}
                     >Update</Button>
 
-                    
+
                 </View>
             </ScrollView>
 
